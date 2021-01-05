@@ -1,19 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../auth/AuthContext";
+
 import Swal from "sweetalert2";
+
+import { AuthContext } from "../auth/AuthContext";
+
 export const LoginPage = () => {
   const { login } = useContext(AuthContext);
+
   const [form, setForm] = useState({
-    email: "",
-    password: "",
-    rememberme: true
+    email: "test1@test.com",
+    password: "123456",
+    rememberme: false
   });
 
   useEffect(() => {
-    const remembermeEmail = localStorage.getItem("email");
-    if (remembermeEmail) {
-      setForm(form => ({ ...form, rememberme: true, email: remembermeEmail }));
+    const email = localStorage.getItem("email");
+    if (email) {
+      setForm(form => ({
+        ...form,
+        email,
+        rememberme: true
+      }));
     }
   }, []);
 
@@ -26,27 +34,30 @@ export const LoginPage = () => {
   };
 
   const toggleCheck = () => {
+    console.log("??");
     setForm({
       ...form,
       rememberme: !form.rememberme
     });
   };
 
-  const onSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async ev => {
+    ev.preventDefault();
 
-    if (form.rememberme) {
-      localStorage.setItem("email", form.email);
-    } else {
-      localStorage.removeItem("email");
-    }
+    form.rememberme
+      ? localStorage.setItem("email", form.email)
+      : localStorage.removeItem("email");
 
     const { email, password } = form;
     const ok = await login(email, password);
-    console.log(ok);
+
     if (!ok) {
-      Swal.fire("Error", "Verifique el usuario y la contraseña", "error");
+      Swal.fire("Error", "Verifique el usuario y contraseña", "error");
     }
+  };
+
+  const todoOk = () => {
+    return form.email.length > 0 && form.password.length > 0 ? true : false;
   };
 
   return (
@@ -102,9 +113,9 @@ export const LoginPage = () => {
 
       <div className="container-login100-form-btn m-t-17">
         <button
-          className="login100-form-btn"
-          disabled={form.email === "" || form.password === ""}
           type="submit"
+          className="login100-form-btn"
+          disabled={!todoOk()}
         >
           Ingresar
         </button>

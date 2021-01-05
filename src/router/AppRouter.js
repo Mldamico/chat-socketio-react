@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect
+  Redirect,
+  Route
 } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 import { ChatPage } from "../pages/ChatPage";
@@ -16,6 +16,7 @@ export const AppRouter = () => {
 
   useEffect(() => {
     verificaToken();
+    console.log("muchos");
   }, [verificaToken]);
 
   if (auth.checking) {
@@ -25,7 +26,6 @@ export const AppRouter = () => {
     <Router>
       <div>
         <Switch>
-          {/* <Route path="/auth" component={AuthRouter} /> */}
           <PublicRoute
             isAuthenticated={auth.logged}
             path="/auth"
