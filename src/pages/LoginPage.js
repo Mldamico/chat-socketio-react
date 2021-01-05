@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../auth/AuthContext";
 
 export const LoginPage = () => {
+  const { login } = useContext(AuthContext);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -38,6 +40,9 @@ export const LoginPage = () => {
     } else {
       localStorage.removeItem("email");
     }
+
+    const { email, password } = form;
+    login(email, password);
   };
 
   return (
@@ -92,7 +97,12 @@ export const LoginPage = () => {
       </div>
 
       <div className="container-login100-form-btn m-t-17">
-        <button className="login100-form-btn">Ingresar</button>
+        <button
+          className="login100-form-btn"
+          disabled={form.email === "" || form.password === ""}
+        >
+          Ingresar
+        </button>
       </div>
     </form>
   );
