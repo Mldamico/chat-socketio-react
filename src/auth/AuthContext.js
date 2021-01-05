@@ -13,16 +13,50 @@ const initialState = {
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(initialState);
+
   const login = async (email, password) => {
     const resp = await fetchSinToken("login", { email, password }, "POST");
-    console.log(resp);
+    if (resp.ok) {
+      const { usuario } = resp;
+      localStorage.setItem("token", resp.token);
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email
+      });
+    }
+    return resp.ok;
   };
-  const register = (nombre, email, password) => {};
+
+  const register = async (nombre, email, password) => {
+    const resp = await fetchSinToken(
+      "login/new",
+      { nombre, email, password },
+      "POST"
+    );
+    if (resp.ok) {
+      const { usuario } = resp;
+      localStorage.setItem("token", resp.token);
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email
+      });
+      return true;
+    }
+    return resp.msg;
+  };
   const verificaToken = useCallback(() => {}, []);
 
   const logout = () => {};
   return (
-    <AuthContext.Provider value={{ login, register, verificaToken, logout }}>
+    <AuthContext.Provider
+      value={{ login, register, verificaToken, logout, auth }}
+    >
       {children}
     </AuthContext.Provider>
   );

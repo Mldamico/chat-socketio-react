@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
-
+import Swal from "sweetalert2";
 export const LoginPage = () => {
   const { login } = useContext(AuthContext);
   const [form, setForm] = useState({
@@ -13,7 +13,7 @@ export const LoginPage = () => {
   useEffect(() => {
     const remembermeEmail = localStorage.getItem("email");
     if (remembermeEmail) {
-      setForm({ ...form, rememberme: true, email: remembermeEmail });
+      setForm(form => ({ ...form, rememberme: true, email: remembermeEmail }));
     }
   }, []);
 
@@ -32,7 +32,7 @@ export const LoginPage = () => {
     });
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
 
     if (form.rememberme) {
@@ -42,7 +42,11 @@ export const LoginPage = () => {
     }
 
     const { email, password } = form;
-    login(email, password);
+    const ok = await login(email, password);
+    console.log(ok);
+    if (!ok) {
+      Swal.fire("Error", "Verifique el usuario y la contraseña", "error");
+    }
   };
 
   return (
@@ -100,6 +104,7 @@ export const LoginPage = () => {
         <button
           className="login100-form-btn"
           disabled={form.email === "" || form.password === ""}
+          type="submit"
         >
           Ingresar
         </button>
