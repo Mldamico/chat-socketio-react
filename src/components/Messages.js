@@ -10,7 +10,7 @@ export const Messages = () => {
   const { auth } = useContext(AuthContext);
   return (
     <div className="mesgs">
-      <div className="msg_history">
+      <div className="msg_history" id="mensajes">
         {chatState.mensajes.map(mensaje =>
           mensaje.para === auth.uid ? (
             <IncomingMessage message={mensaje} key={mensaje._id} />
