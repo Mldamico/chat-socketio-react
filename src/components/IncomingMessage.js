@@ -1,4 +1,5 @@
 import React from "react";
+import { horaMes } from "../helpers/horaMes";
 
 export const IncomingMessage = ({ message }) => {
   return (
@@ -12,7 +13,7 @@ export const IncomingMessage = ({ message }) => {
       <div className="received_msg">
         <div className="received_withd_msg">
           <p>{message.mensaje}</p>
-          <span className="time_date"> 11:01 AM | June 9</span>
+          <span className="time_date"> {horaMes(message.createdAt)}</span>
         </div>
       </div>
     </div>
