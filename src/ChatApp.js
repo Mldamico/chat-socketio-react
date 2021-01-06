@@ -6,12 +6,12 @@ import { AppRouter } from "./router/AppRouter";
 
 export const ChatApp = () => {
   return (
-    <AuthProvider>
-      <SocketProvider>
-        <ChatProvider>
+    <ChatProvider>
+      <AuthProvider>
+        <SocketProvider>
           <AppRouter />
-        </ChatProvider>
-      </SocketProvider>
-    </AuthProvider>
+        </SocketProvider>
+      </AuthProvider>
+    </ChatProvider>
   );
 };
