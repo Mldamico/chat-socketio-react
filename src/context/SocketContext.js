@@ -18,6 +18,12 @@ export const SocketProvider = ({ children }) => {
   }, [auth, conectarSocket]);
 
   useEffect(() => {
+    socket?.on("lista-usuarios", usuarios => {
+      console.log(usuarios);
+    });
+  }, [socket]);
+
+  useEffect(() => {
     if (!auth.logged) {
       desconectarSocket();
     }
